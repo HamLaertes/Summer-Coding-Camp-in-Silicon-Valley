@@ -1,0 +1,94 @@
+class Binary_Tree:
+	def __init__(self, value):
+		self.value = value
+		self.left = None
+		self.right = None
+
+	def preorder_tranversal(self, root):
+		res = []
+		self.helper(root, res)
+		return res
+	
+	def preorder_helper(self, root, res):
+		if not root:
+			return
+		res.append(root.value)
+		self.preorder_helper(root.left, res)
+		self.preorder_helper(root.right, res)
+	
+	def inorder_tranversal(self, root):
+		res = []
+		self.inorder_helper(root, res)
+		return res
+
+	def inorder_helper(self, root, res):
+		if nor root:
+			return
+		self.inorder_helper(root.left, res)
+		res.append(root.value)
+		self.inorder_helper(root.right, res)
+	
+	def postorder_tranversal(self, root):
+		res = []
+		self.postorder_helper(root, res)
+		return res
+
+	def postorder_helper(self, root, res):
+		if nor root:
+			return
+		self.postorder_helper(root.left, res)
+		self.postorder_helper(root.right, res)
+		res.append(root.value)
+		
+	def getHeight(self, root):
+		if not root:
+			return 0
+		return 1 + max(self.getHeight(root.left), self.getHeight(root.right))
+		
+	def getCount(self, root):
+		if not root:
+			return 0
+		return self.getCount(root.left) + self.getCount(self.right) + 1
+		
+		
+	def levelorder_tranversal(self, root):
+		if not root:
+			return 0
+		q = []
+		q.append(root)
+		while q:
+			size = len(q)
+			lst = []
+			for i in xrange(size):
+				if q[0].left:
+					q.append(q[0].left)
+				if q[0].right:
+					q.append(q[0].right)
+				lst.append(q[0].pop.value)
+			print lst
+	
+	def BST_TypeOne(self, root):
+		if not root:
+			return True
+		if not self.isBST_TypeOne(root.left):
+			return False
+		if root.left.value > root.value:
+			return False
+		if root.right.value < root.value
+			return False
+		return self.isBST_TypeOne(root.right)
+		
+	def BST_TypeTwo(self, root):
+		if not root:
+			return True
+		min = float('-inf')
+		max = float('inf')
+		return isBST(root, min, max)
+		
+	def isBST(self, root, min, max):
+		if not root:
+			return True
+		if root.value >= max or root.value <= min:
+			return False
+		return isBST(root.left, min, root.value)
+				and isBST(root.right, root.value, max)
