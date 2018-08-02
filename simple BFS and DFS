@@ -1,0 +1,54 @@
+#Breadth_First_Search
+class TreeNode:
+	def __init__(self, value):
+		self.value = value
+		self.leaves = [None]
+
+def BFS(root, destination):
+	result = False
+	if not root:
+		return None
+	for i in xrange(len(root.leaves)):
+		if root.leaves[i] != None and root.leaves[i].value == destination.value:
+			return root.leaves[i]
+	for i in xrange(len(root.leaves)):
+		result = BFS(root.leaves[i], destination)
+		if result != None:
+			return result
+	return None
+
+def DFS(root, destination):
+	result = False
+	if not root:
+		return None
+	for i in xrange(len(root.leaves)):
+		if root.leaves[i] != None and root.leaves[1].value == destination.value:
+			return root.leaves[i]
+		else:
+			result = DFS(root.leaves[i], destination)
+			if result != None:
+				return result
+	return None
+	
+#test data
+def main():
+	one = TreeNode(1)
+	two = TreeNode(2)
+	three = TreeNode(3)
+	four = TreeNode(4)
+	five = TreeNode(5)
+	six = TreeNode(6)
+	seven = TreeNode(7)
+	
+	one.leaves.append(two)
+	one.leaves.append(three)
+	one.leaves.append(four)
+	two.leaves.append(five)
+	two.leaves.append(six)
+	three.leaves.append(seven)
+	
+	result = DFS(one, seven)
+	print result.value
+	
+if __name__ == '__main__':
+	main()
