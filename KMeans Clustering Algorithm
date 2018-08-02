@@ -1,0 +1,72 @@
+from random import uniform
+
+def distinct(a_x, a_y, b_x, b_y):
+	return (b_x - a_x) * (b_x - a_x) + (b_y - a_y) * (b_y - b_y)
+	
+def KMeans_iterator(lst_x, lst_y, tag, seed_x, seed_y, k):#initial point location; result of each point in this iteration; new k seeds location
+	#recomputing the distance between each point and each seed and rejudge the tag of each point
+	#the time complexity of this process is n * k * d(time complexity of the function distinct)
+	for n in xrange(1, max(len(lst_x), len(lst_y))):
+		min_number = distinct(lst_x[n], lst_y[n], seed_x[0], seed_y[0])
+		index = 0
+		for i in  range(k):
+			tmp = distinct(lst_x[n], lst_y[n], seed_x[i], seed_y[i])
+			if tmp < min_number:
+				index = i
+		tag[n] = index
+		
+	#relocating each seed
+	#the time complexity of this process is n + k
+	#the space complexity of this process is k
+	count = seed_x_tmp = seed_y_tmp = [0] * k
+	for n in xrange(max(len(lst_x), len(lst_y))):
+		count[tag[n]] += 1 
+		seed_x_tmp[tag[n]] += lst_x[n]
+		seed_y_tmp[tag[n]] += lst_y[n]
+	
+	#computing the average location
+	result = False
+	for i in range(k):
+		if count[i] == 0:
+			#a_x = min_in(lst_x)
+			#b_x = max_in(lst_x)
+			#a_y = min_in(lst_y)
+			#b_y = min_in(lst_y)
+			seed_x[i] = round(uniform(0, 100), 2)
+			seed_y[i] = round(uniform(0, 100), 2)
+		else:
+			if not (seed_x[i] == seed_x_tmp[i] / count[i] and seed_y[i] == seed_y_tmp[i] / count[i]):
+				result = True
+				seed_x[i] == seed_x_tmp[i] / count[i]
+				seed_y[i] == seed_y_tmp[i] / count[i]
+
+	if not result:
+		return tag
+	else:
+		return KMeans_iterator(lst_x, lst_y, tag, seed_x, seed_y, k)
+		
+def KMeans(lst_x, lst_y, k):
+	#the space complexity is n
+	#a_x = min_in(lst_x)
+	#b_x = max_in(lst_x)
+	#a_y = min_in(lst_y)
+	#b_y = min_in(lst_y)
+	seed_x = []
+	seed_y = []
+	tag = [0] * max(len(lst_x), len(lst_y))
+	for i in xrange(k):
+		#seed_x.append(round(uniform(a_x, b_y), 2))
+		#seed_y.append(round(uniform(a_y, b_y), 2))
+		seed_x.append(round(uniform(0, 100), 2))
+		seed_y.append(round(uniform(0, 100), 2))
+	result = KMeans_iterator(lst_x, lst_y, tag, seed_x, seed_y, k)
+	return result
+	
+def main():
+	lst_x = [1, 2, 3, 4, 5, 6, 92, 93, 94, 95, 96, 97, 98, 99, 100]
+	lst_y = lst_x
+	result = KMeans(lst_x, lst_y, 2)
+	print result
+
+if __name__ == '__main__':
+	main()
