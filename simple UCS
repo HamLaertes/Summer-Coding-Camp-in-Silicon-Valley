@@ -1,0 +1,107 @@
+#Uniform-Cost Search
+class TreeNode:
+	def __init__(self, name):
+		self.state = False
+		self.name = name
+		self.leaves = dict() #this dictionary stores the name of and the distance from node to its' child node. 
+		self.g_value = 0
+	
+	def __lt__(self, node):
+		return self.g_value < node.g_value
+	
+	def __gt__(self, node):
+		return self.g_value > node.g_value
+	
+	def __le__(self, node):
+		return self.g_value <= node.g_value
+	
+	def __ge__(self, node):
+		return self.g_value >= node.g_value
+def UCS(root, current, destination):
+	if root.name == destination.name:
+		return root.g_value
+	if len(current) == 0 or not root:
+		return None
+	
+	current.remove(root)
+	for k in root.leaves.keys():
+		if not k.state:
+			k.g_value = root.g_value + root.leaves[k]
+			k.state = True
+			current.append(k)
+	
+	current = sort.Merge_Sort(current)#the merge sort function is in another text which is also written myself.
+	length = len(current)
+	for i in range(length):
+		result = UCS(current[i], current, destination)
+		if result == None:
+			current.remove(current[i])
+		else:
+			return result
+	
+#A-Star Algorithm
+
+def A_Star(root, current, destination)
+'''
+I think, A_Star's code basically is the same as UCS. With more details, the adjustment
+is to change the comparison of the g_value into f_value which is the sum of g_value and g_value.
+
+the f_value in most basic cases is Manhattan distance.
+In order to get Manhattan distance, we have use grid map as the input.
+I think this input is too simplified to reflect the objective world. So I am trying to read
+more paper about A* and its improved algorithm and trying to accomplish those algorithm myself.
+Although the code to calculate Manhattan distance is not complicated, in further coding, I
+will also accomplish it myself.
+'''
+#test data
+def main():
+	A = TreeNode('A')
+	B = TreeNode('B')
+	C = TreeNode('C')
+	D = TreeNode('D')
+	E = TreeNode('E')
+	F = TreeNode('F')
+	G = TreeNode('G')
+	H = TreeNode('H')
+	
+	A.leaves[A] = 0
+	A.leaves[B] = 297
+	A.leaves[C] = 243
+	A.leaves[D] = 261
+	A.leaves[E] = 309
+	B.leaves[A] = 297
+	B.leaves[B] = 0
+	B.leaves[C] = 183
+	B.leaves[F] = 346
+	C.leaves[A] = 243
+	C.leaves[C] = 0
+	C.leaves[B] = 183
+	C.leaves[D] = 114
+	C.leaves[G] = 176
+	D.leaves[A] = 261
+	D.leaves[C] = 114
+	D.leaves[D] = 0
+	D.leaves[G] = 206
+	D.leaves[E] = 175
+	E.leaves[A] = 309
+	E.leaves[E] = 0
+	E.leaves[D] = 175
+	F.leaves[B] = 346
+	F.leaves[F] = 0
+	F.leaves[G] = 144
+	F.leaves[H] = 133
+	G.leaves[C] = 176
+	G.leaves[D] = 206
+	G.leaves[H] = 185
+	G.leaves[F] = 144
+	G.leaves[G] = 0
+	H.leaves[H] = 0
+	H.leaves[F] = 133
+	H.leaves[G] = 185
+	
+	current = [A]
+	result = UCS(A, current, H)
+	print result
+	
+if __name__ == '__main__':
+	main()
